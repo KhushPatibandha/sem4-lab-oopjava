@@ -1,79 +1,57 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Lab8 {
     public static void main(String[] args) {
-        try (Scanner sc = new Scanner(System.in)) {
-            List<Person> people = new ArrayList<>();
-            List<Employee> employees = new ArrayList<>();
+        Person admin = new Person("admin", 1000000000, false);
+        Employee adminEmployee = new Employee("admin", 1000000000, 0);
 
-            Person p1 = new Person("khush", 1234);
-            people.add(p1);
+        new Person("khush", 1234, false);
+        new Person("aditya", 5678, false);
+        new Employee("varun", 123456, 1);
+        new Employee("sahil", 789101, 2);
 
-            Person p2 = new Person("rahul", 5678);
-            people.add(p2);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("What search parameter do you want to use? (name/adhar/employeeId)");
+        System.out.println("1 for name, 2 for adhar, 3 for employeeId");
+        System.out.println("Enter your choice: ");
+        int choice = sc.nextInt();
 
-            Employee e1 = new Employee("harsh", 1212, 1);
-            employees.add(e1);
-
-            Employee e2 = new Employee("sahil", 3434, 2);
-            employees.add(e2);
-            
-            
-            System.out.println("What do you want to find the person by? name, adhar number or employee id ?");
-            System.out.println("Enter 1 for name, 2 for adhar number and 3 for employee id");
-            int choice = sc.nextInt();
-            switch(choice) {
-                case 1:
-                    System.out.println("Enter the name: ");
-                    String name = sc.next().toLowerCase();
-                    for(Person person : people) {
-                        if(person.search(name) != null) {
-                            person.getPerson();
-                            return;
-                        }
-                    }
-                    for(Employee employee : employees) {
-                        if(employee.search(name) != null) {
-                            employee.getEmployee();
-                            return;
-                        }
-                    }
-                    System.out.println("No person found with the given name");
-                    break;
-
-                case 2:
-                    System.out.println("Enter the adhar number: ");
-                    int adhar = sc.nextInt();
-                    for(Person person : people) {
-                        if(person.search(adhar) != null) {
-                            person.getPerson();
-                            return;
-                        }
-                    }
-                    System.out.println("No person found with the given adhar number");
-                    break;
-
-                case 3:
-                    System.out.println("Enter the employee id: ");
-                    int employeeId = sc.nextInt();
-                    for(Employee employee : employees) {
-                        if(employee.search(employeeId) != null) {
-                            employee.getEmployee();
-                            return;
-                        }
-                    }
-                    System.out.println("No employee found with the given employee id");
-                    break;
-
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+        if(choice == 1) {
+            System.out.println("Enter the name: ");
+            String name = sc.next().toLowerCase();
+            Person person = admin.search(name);
+            Employee employee = adminEmployee.search(name);
+            if(employee != null) {
+                employee.getEmployee();
+            } else if(person != null) {
+                person.getPerson();
+            } else {
+                System.out.println("No such person found");
+            } 
+        } else if(choice == 2) {
+            System.out.println("Enter the adhar: ");
+            int adhar = sc.nextInt();
+            Person person = admin.search(adhar);
+            if(person != null) {
+                person.getPerson();
+            } else {
+                System.out.println("No such person found");
             }
-
-            sc.close();
+        } else if(choice == 3) {
+            System.out.println("Enter the employeeId: ");
+            int employeeId = sc.nextInt();
+            Employee employee = adminEmployee.search(employeeId);
+            if(employee != null) {
+                employee.getEmployee();
+            } else {
+                System.out.println("No such employee found");
+            }
+        } else {
+            System.out.println("Invalid choice");
         }
+
+        sc.close();
     }
 }
 
@@ -82,12 +60,17 @@ interface PersonInterface {
 }
 
 class Person implements PersonInterface {
+    private static ArrayList<Person> people = new ArrayList<>();
     private String name;
     private int adhar;
 
-    public Person(String name, int adhar) {
+    public Person(String name, int adhar, boolean isEmployee) {
         this.name = name;
         this.adhar = adhar;
+        if(!isEmployee) {
+            people.add(this);
+        }
+        // System.out.println(people.toString());
     }
 
     public String getName() {
@@ -109,15 +92,19 @@ class Person implements PersonInterface {
 
     @Override
     public Person search(String name) {
-        if(this.name.equals(name)) {
-            return this;
+        for(Person person : people) {
+            if(person.name.equals(name)) {
+                return person;
+            }
         }
         return null;
     }
     
     public Person search(int adhar) {
-        if(this.adhar == adhar) {
-            return this;
+        for(Person person : people) {
+            if(person.adhar == adhar) {
+                return person;
+            }
         }
         return null;
     }
@@ -125,11 +112,14 @@ class Person implements PersonInterface {
 
 class Employee extends Person {
     
+    private static ArrayList<Employee> employees = new ArrayList<>();
     private int employeeId;
     
     public Employee(String name, int adhar, int employeeId) {
-        super(name, adhar);
+        super(name, adhar, true);
         this.employeeId = employeeId;
+        employees.add(this);
+        // System.out.println(employees.toString());
     }
 
     public int getEmployeeId() {
@@ -141,20 +131,23 @@ class Employee extends Person {
     }
     
     public void getEmployee() {
-        System.out.println("Name: " + this.getName() + " Adhar: " + this.getAdhar() + " Employee ID: " + this.employeeId );
+        System.out.println("Name: " + this.getName() + " Adhar: " + this.getAdhar() + " Employee ID: " + this.getEmployeeId());
     }
 
-    @Override
-    public Person search(String name) {
-        if(this.getName().equals(name)) {
-            return this;
+    public Employee search(String name) {
+        for(Employee employee : employees) {
+            if(employee.getName().equals(name)) {
+                return employee;
+            }
         }
         return null;
     }
 
-    public Person search(int employeeId) {
-        if(this.employeeId == employeeId) {
-            return this;
+    public Employee search(int employeeId) {
+        for(Employee employee : employees) {
+            if(employee.employeeId == employeeId) {
+                return employee;
+            }
         }
         return null;
     }

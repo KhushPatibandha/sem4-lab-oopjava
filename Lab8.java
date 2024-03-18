@@ -8,10 +8,18 @@ public class Lab8 {
         List<Person> people = new ArrayList<>();
         List<Employee> employees = new ArrayList<>();
 
-        people.add(new Person("Khush", "1234"));
-        employees.add(new Employee("Aditya", "8989", "E1"));
-        people.add(new Person("Harsh", "1356"));
-        employees.add(new Employee("Arya", "9042", "E2"));
+        Person p1 = new Person("khush", 1234);
+        people.add(p1);
+
+        Person p2 = new Person("rahul", 5678);
+        people.add(p2);
+
+        Employee e1 = new Employee("harsh", 1212, 1);
+        employees.add(e1);
+
+        Employee e2 = new Employee("sahil", 3434, 2);
+        employees.add(e2);
+        
         
         System.out.println("What do you want to find the person by? name, adhar number or employee id ?");
         System.out.println("Enter 1 for name, 2 for adhar number and 3 for employee id");
@@ -21,12 +29,12 @@ public class Lab8 {
                 System.out.println("Enter the name: ");
                 String name = sc.next();
                 for(Person person : people) {
-                    if(person.getObjectByName(name) != null) {
+                    if(person.search(name) != null) {
                         person.getPerson();
                     }
                 }
                 for(Employee employee : employees) {
-                    if(employee.getObjectByName(name) != null) {
+                    if(employee.search(name) != null) {
                         employee.getEmployee();
                     }
                 }
@@ -34,9 +42,9 @@ public class Lab8 {
 
             case 2:
                 System.out.println("Enter the adhar number: ");
-                String adhar = sc.next();
+                int adhar = sc.nextInt();
                 for(Person person : people) {
-                    if(person.getObjectByAdharOrEmpId(adhar) != null) {
+                    if(person.search(adhar) != null) {
                         person.getPerson();
                     }
                 }
@@ -44,9 +52,9 @@ public class Lab8 {
 
             case 3:
                 System.out.println("Enter the employee id: ");
-                String employeeId = sc.next();
+                int employeeId = sc.nextInt();
                 for(Employee employee : employees) {
-                    if(employee.getObjectByAdharOrEmpId(employeeId) != null) {
+                    if(employee.search(employeeId) != null) {
                         employee.getEmployee();
                     }
                 }
@@ -61,16 +69,15 @@ public class Lab8 {
     }
 }
 
-interface PersonInterface<T> {
-    public T getObjectByName(String name);
-    public T getObjectByAdharOrEmpId(String id);
+interface PersonInterface {
+    public Person search(String name);
 }
 
-class Person implements PersonInterface<Person> {
+class Person implements PersonInterface {
     private String name;
-    private String adhar;
+    private int adhar;
 
-    public Person(String name, String adhar) {
+    public Person(String name, int adhar) {
         this.name = name;
         this.adhar = adhar;
     }
@@ -78,13 +85,13 @@ class Person implements PersonInterface<Person> {
     public String getName() {
         return name;
     }
-    public String getAdhar() {
+    public int getAdhar() {
         return adhar;
     }
     public void setName(String name) {
         this.name = name;
     }
-    public void setAdhar(String adhar) {
+    public void setAdhar(int adhar) {
         this.adhar = adhar;
     }
 
@@ -93,16 +100,15 @@ class Person implements PersonInterface<Person> {
     }
 
     @Override
-    public Person getObjectByName(String name) {
+    public Person search(String name) {
         if(this.name.equals(name)) {
             return this;
         }
         return null;
     }
-
-    @Override
-    public Person getObjectByAdharOrEmpId(String id) {
-        if(this.adhar.equals(id)) {
+    
+    public Person search(int adhar) {
+        if(this.adhar == adhar) {
             return this;
         }
         return null;
@@ -111,18 +117,18 @@ class Person implements PersonInterface<Person> {
 
 class Employee extends Person {
     
-    private String employeeId;
+    private int employeeId;
     
-    public Employee(String name, String adhar, String employeeId) {
+    public Employee(String name, int adhar, int employeeId) {
         super(name, adhar);
         this.employeeId = employeeId;
     }
 
-    public String getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
     
@@ -131,8 +137,15 @@ class Employee extends Person {
     }
 
     @Override
-    public Employee getObjectByAdharOrEmpId(String id) {
-        if(this.employeeId.equals(id)) {
+    public Person search(String name) {
+        if(this.getName().equals(name)) {
+            return this;
+        }
+        return null;
+    }
+
+    public Person search(int employeeId) {
+        if(this.employeeId == employeeId) {
             return this;
         }
         return null;

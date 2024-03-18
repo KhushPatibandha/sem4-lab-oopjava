@@ -4,68 +4,76 @@ import java.util.Scanner;
 
 public class Lab8 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        List<Person> people = new ArrayList<>();
-        List<Employee> employees = new ArrayList<>();
+        try (Scanner sc = new Scanner(System.in)) {
+            List<Person> people = new ArrayList<>();
+            List<Employee> employees = new ArrayList<>();
 
-        Person p1 = new Person("khush", 1234);
-        people.add(p1);
+            Person p1 = new Person("khush", 1234);
+            people.add(p1);
 
-        Person p2 = new Person("rahul", 5678);
-        people.add(p2);
+            Person p2 = new Person("rahul", 5678);
+            people.add(p2);
 
-        Employee e1 = new Employee("harsh", 1212, 1);
-        employees.add(e1);
+            Employee e1 = new Employee("harsh", 1212, 1);
+            employees.add(e1);
 
-        Employee e2 = new Employee("sahil", 3434, 2);
-        employees.add(e2);
-        
-        
-        System.out.println("What do you want to find the person by? name, adhar number or employee id ?");
-        System.out.println("Enter 1 for name, 2 for adhar number and 3 for employee id");
-        int choice = sc.nextInt();
-        switch(choice) {
-            case 1:
-                System.out.println("Enter the name: ");
-                String name = sc.next();
-                for(Person person : people) {
-                    if(person.search(name) != null) {
-                        person.getPerson();
+            Employee e2 = new Employee("sahil", 3434, 2);
+            employees.add(e2);
+            
+            
+            System.out.println("What do you want to find the person by? name, adhar number or employee id ?");
+            System.out.println("Enter 1 for name, 2 for adhar number and 3 for employee id");
+            int choice = sc.nextInt();
+            switch(choice) {
+                case 1:
+                    System.out.println("Enter the name: ");
+                    String name = sc.next().toLowerCase();
+                    for(Person person : people) {
+                        if(person.search(name) != null) {
+                            person.getPerson();
+                            return;
+                        }
                     }
-                }
-                for(Employee employee : employees) {
-                    if(employee.search(name) != null) {
-                        employee.getEmployee();
+                    for(Employee employee : employees) {
+                        if(employee.search(name) != null) {
+                            employee.getEmployee();
+                            return;
+                        }
                     }
-                }
-                break;
+                    System.out.println("No person found with the given name");
+                    break;
 
-            case 2:
-                System.out.println("Enter the adhar number: ");
-                int adhar = sc.nextInt();
-                for(Person person : people) {
-                    if(person.search(adhar) != null) {
-                        person.getPerson();
+                case 2:
+                    System.out.println("Enter the adhar number: ");
+                    int adhar = sc.nextInt();
+                    for(Person person : people) {
+                        if(person.search(adhar) != null) {
+                            person.getPerson();
+                            return;
+                        }
                     }
-                }
-                break;
+                    System.out.println("No person found with the given adhar number");
+                    break;
 
-            case 3:
-                System.out.println("Enter the employee id: ");
-                int employeeId = sc.nextInt();
-                for(Employee employee : employees) {
-                    if(employee.search(employeeId) != null) {
-                        employee.getEmployee();
+                case 3:
+                    System.out.println("Enter the employee id: ");
+                    int employeeId = sc.nextInt();
+                    for(Employee employee : employees) {
+                        if(employee.search(employeeId) != null) {
+                            employee.getEmployee();
+                            return;
+                        }
                     }
-                }
-                break;
+                    System.out.println("No employee found with the given employee id");
+                    break;
 
-            default:
-                System.out.println("Invalid choice");
-                break;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+
+            sc.close();
         }
-
-        sc.close();
     }
 }
 

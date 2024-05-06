@@ -13,10 +13,10 @@ public class Lab10 {
         s1.setCourse(course2);
 
         s2.setCourse(course);
-        s2.setCourse(course2);
+        // s2.setCourse(course2);
 
         s1.searchByName("Khush");
-        // s1.searchById(11);
+        s1.searchById(11);
     }
 }
 
@@ -56,7 +56,7 @@ class Student {
         for(Student student : students) {
             if(student.getStudentName().equals(name)) {
                 System.out.println("studentId : " + student.getStudentId() + " courses: ");
-                for(Course course : courses) {
+                for(Course course : student.getCourses()) {
                     System.out.println(course.getCourseName());
                 }
             }
@@ -67,7 +67,7 @@ class Student {
         for(Student student : students) {
             if(student.getStudentId() == id) {
                 System.out.println("student name : " + student.getStudentName() + " courses : ");
-                for(Course course : courses) {
+                for(Course course : student.getCourses()) {
                     System.out.println(course.getCourseName());
                 }
             }

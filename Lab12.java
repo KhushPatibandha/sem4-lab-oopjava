@@ -1,25 +1,71 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class Lab12 {
     public static void main(String[] args) {
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(new File("lab12.txt")));
-            bw.write("Hello my name is khush");
-            bw.newLine();
-            bw.flush();
-            bw.close();
+        FileIOTest fileIOTest = new FileIOTest();
+        BufferTest bufferTest = new BufferTest();
 
-            BufferedReader br = new BufferedReader(new FileReader(new File("lab12.txt")));
-            String line = br.readLine();
-            System.out.println(line);
-            br.close(); 
+        fileIOTest.test();
+        bufferTest.test();
+    }
+}
+
+class FileIOTest {
+    void test() {
+        try {
+            long startTime = System.nanoTime();
+            writeFile();
+            long endTime = System.nanoTime();
+            System.out.println("Time taken by FileOutputStream: " + (endTime - startTime));
+
+            startTime = System.nanoTime();
+            readFile();
+            endTime = System.nanoTime();
+            System.out.println("Time taken by FileInputStream: " + (endTime - startTime));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    void writeFile() throws IOException {
+        FileOutputStream fos = new FileOutputStream("test.txt");
+        fos.write("Hello, World!".getBytes());
+        fos.close();
+    }
+
+    void readFile() throws IOException {
+        FileInputStream fis = new FileInputStream("test.txt");
+        fis.read(new byte[1024]);
+        fis.close();
+    }
+}
+
+class BufferTest {
+    void test() {
+        try {
+            long startTime = System.nanoTime();
+            writeFile();
+            long endTime = System.nanoTime();
+            System.out.println("Time taken by BufferedWriter: " + (endTime - startTime));
+
+            startTime = System.nanoTime();
+            readFile();
+            endTime = System.nanoTime();
+            System.out.println("Time taken by BufferedReader: " + (endTime - startTime));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void writeFile() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("test.txt"));
+        bw.write("Hello, World!");
+        bw.close();
+    }
+
+    void readFile() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+        br.readLine();
+        br.close();
     }
 }

@@ -29,13 +29,10 @@ public class Lab9 {
 
         // User defined exception
         try {
-            int a = 10;
             int b = 0;
-            int c = a / b;
             if(b == 0) {
-                throw new ExceptionA("Division by zero");
+                throw new ExceptionA("hii....");
             }
-            System.out.println(c);
         } catch (ExceptionA e) {
             System.out.println(e.getMessage()); 
         }

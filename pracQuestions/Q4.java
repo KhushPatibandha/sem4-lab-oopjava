@@ -21,9 +21,10 @@ public class Q4 {
 
         final int[] max1 = {Integer.MIN_VALUE};
         final int[] max2 = {Integer.MIN_VALUE};
+        int maxMain = Integer.MIN_VALUE;
 
         Thread t1 = new Thread(() -> {
-            for(int i = 0; i < list.size() / 2; i++) {
+            for(int i = 0; i < list.size() / 3; i++) {
                 System.out.println("Thread 1 currently dealing with " + list.get(i) + " while the max for this thread is "+ max1[0]);
                 if(list.get(i) > max1[0]) {
                     max1[0] = list.get(i);
@@ -33,7 +34,7 @@ public class Q4 {
         });
         
         Thread t2 = new Thread(() -> {
-            for(int i = list.size() / 2; i < list.size(); i++) {
+            for(int i = list.size() / 3; i < 2 * list.size() / 3; i++) {
                 System.out.println("Thread 2 currently dealing with " + list.get(i) + " while the max for this thread is "+ max2[0]);
                 if(list.get(i) > max2[0]) {
                     max2[0] = list.get(i);
@@ -45,6 +46,14 @@ public class Q4 {
         t1.start();
         t2.start();
 
+        for(int i = 2 * list.size() / 3; i < list.size(); i++) {
+            System.out.println("main Thread currently dealing with " + list.get(i) + " while the max for this main thread is "+ maxMain);
+            if(list.get(i) > maxMain) {
+                maxMain = list.get(i);
+                System.out.println("Updated max value in thread main: " + maxMain);
+            }
+        }
+
         try {
             t1.join();
             t2.join();
@@ -53,10 +62,12 @@ public class Q4 {
         }
 
         int res = -1;
-        if(max1[0] >= max2[0]) {
+        if(max1[0] >= max2[0] && max1[0] >= maxMain) {
             res = max1[0];
-        } else {
+        } else if(max2[0] >= max1[0] && max2[0] >= maxMain) {
             res = max2[0];
+        } else {
+            res = maxMain;
         }
 
         System.out.println("Max: " + res);

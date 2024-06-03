@@ -21,9 +21,10 @@ public class Q3 {
 
         final int[] min1 = {Integer.MAX_VALUE};
         final int[] min2 = {Integer.MAX_VALUE};
+        int minMain = Integer.MAX_VALUE;
 
         Thread t1 = new Thread(() -> {
-            for(int i = 0; i < list.size() / 2; i++) {
+            for(int i = 0; i < list.size() / 3; i++) {
                 System.out.println("Thread 1 currently dealing with " + list.get(i) + " while the min for this thread is "+ min1[0]);
                 if(list.get(i) < min1[0]) {
                     min1[0] = list.get(i);
@@ -33,7 +34,7 @@ public class Q3 {
         });
         
         Thread t2 = new Thread(() -> {
-            for(int i = list.size() / 2; i < list.size(); i++) {
+            for(int i = list.size() / 3; i < 2 * list.size() / 3; i++) {
                 System.out.println("Thread 2 currently dealing with " + list.get(i) + " while the min for this thread is "+ min2[0]);
                 if(list.get(i) < min2[0]) {
                     min2[0] = list.get(i);
@@ -45,6 +46,14 @@ public class Q3 {
         t1.start();
         t2.start();
 
+        for(int i = 2 * list.size() / 3; i < list.size(); i++) {
+            System.out.println("main thread currently dealing with " + list.get(i) + " while the min for this main thread is "+ minMain);
+            if(list.get(i) < minMain) {
+                minMain = list.get(i);
+                System.out.println("Updated min value in main thread: " + minMain);
+            }
+        }
+
         try {
             t1.join();
             t2.join();
@@ -53,10 +62,12 @@ public class Q3 {
         }
 
         int res = -1;
-        if(min1[0] <= min2[0]) {
+        if(min1[0] <= min2[0] && min1[0] <= minMain) {
             res = min1[0];
-        } else {
+        } else if(min2[0] <= min1[0] && min2[0] <= minMain) {
             res = min2[0];
+        } else {
+            res = minMain;
         }
 
         System.out.println("Min: " + res);

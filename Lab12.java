@@ -35,7 +35,11 @@ class FileIOTest {
 
     void readFile() throws IOException {
         FileInputStream fis = new FileInputStream("test.txt");
-        fis.read(new byte[1024]);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer)) != -1) {
+            System.out.println(new String(buffer, 0, length));
+        }
         fis.close();
     }
 }
@@ -65,7 +69,7 @@ class BufferTest {
 
     void readFile() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("test.txt"));
-        br.readLine();
+        System.out.println(br.readLine());
         br.close();
     }
 }
